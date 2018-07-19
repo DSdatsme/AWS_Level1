@@ -17,7 +17,7 @@ aws ec2 delete-subnet --subnet-id $mySubnetId
 
 echo "Deleting your VPC....."
 #delete a vpc
-aws ec2 delete-vpc --vpc-id $vpcId
+aws ec2 delete-vpc --vpc-id "$vpcId" --region "$vpcRegion"
 
 
 
