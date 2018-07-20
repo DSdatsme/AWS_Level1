@@ -1,0 +1,121 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources" : {
+        "myVPC" : {
+            "Type" : "AWS::EC2::VPC",
+            "Properties" : {
+                "CidrBlock" : "10.0.0.0/16",
+                "EnableDnsSupport" : "false",
+                "EnableDnsHostnames" : "false",
+                "InstanceTenancy" : "default",
+                "Tags" : [ {"Key" : "Name", "Value" : "myVPC"} ]
+            }
+        },
+        
+        "publicSubnetZone1" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "VpcId" : { "Ref" : "myVPC"},
+                "CidrBlock" : "10.0.0.0/24",
+                "AvailabilityZone" : "us-west-2a",
+                "Tags" : [ {"Key" : "Name", "Value" : "PublicSubnetZone1"} ]
+            }
+            
+        },
+        
+        "privateSubnetZone1" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "VpcId" : { "Ref" : "myVPC"},
+                "CidrBlock" : "10.0.4.0/24",
+                "AvailabilityZone" : "us-west-2a",
+                "Tags" : [ {"Key" : "Name", "Value" : "PrivateSubnetZone1"} ]
+            }
+            
+        },
+        "publicSubnetZone2" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "VpcId" : { "Ref" : "myVPC"},
+                "CidrBlock" : "10.0.08.0/24",
+                "AvailabilityZone" : "us-west-2b",
+                "Tags" : [ {"Key" : "Name", "Value" : "PublicSubnetZone2"} ]
+            }
+            
+        },
+        
+        "privateSubnetZone2" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "VpcId" : { "Ref" : "myVPC"},
+                "CidrBlock" : "10.0.12.0/24",
+                "AvailabilityZone" : "us-west-2b",
+                "Tags" : [ {"Key" : "Name", "Value" : "PrivateSubnetZone2"} ]
+            }
+            
+        },
+        "publicSubnetZone3" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "VpcId" : { "Ref" : "myVPC"},
+                "CidrBlock" : "10.0.16.0/24",
+                "AvailabilityZone" : "us-west-2c",
+                "Tags" : [ {"Key" : "Name", "Value" : "PublicSubnetZone3"} ]
+            }
+            
+        },
+        
+        "privateSubnetZone3" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "VpcId" : { "Ref" : "myVPC"},
+                "CidrBlock" : "10.0.20.0/24",
+                "AvailabilityZone" : "us-west-2c",
+                "Tags" : [ {"Key" : "Name", "Value" : "PrivateSubnetZone3"} ]
+            }
+        },
+        "publicRouteTable" : {
+            "Type" : "AWS::EC2::RouteTable",
+            "Properties" : {
+                "VpcId" : { "Ref" : "myVPC" },
+                "Tags" : [ { "Key" : "Name", "Value" : "PublicRouteTable" } ]
+            }
+        },
+        "myInternetGateway" : {
+            "Type" : "AWS::EC2::InternetGateway",
+            "Properties" : {
+                "Tags" : [ {"Key" : "Name", "Value" : "MyInternetGateway"}]
+            }
+        },
+        "publicRouteAssociation1" : {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties" : {
+                "SubnetId" : { "Ref" : "publicSubnetZone1" },
+                "RouteTableId" : { "Ref" : "publicRouteTable" }
+            }
+        },
+        "publicRouteAssociation2" : {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties" : {
+                "SubnetId" : { "Ref" : "publicSubnetZone2" },
+                "RouteTableId" : { "Ref" : "publicRouteTable" }
+            }
+        },
+        "publicRouteAssociation3" : {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties" : {
+                "SubnetId" : { "Ref" : "publicSubnetZone3" },
+                "RouteTableId" : { "Ref" : "publicRouteTable" }
+            }
+        },
+        "publicRoute" : {
+            "Type" : "AWS::EC2::Route",
+            "DependsOn" : "GatewayToInternet",
+            "Properties" : {
+                "RouteTableId" : { "Ref" : "publicRouteTable" },
+                "DestinationCidrBlock" : "0.0.0.0/0",
+                "GatewayId" : { "Ref" : "myInternetGateway" }
+            }
+        }
+    }
+}
