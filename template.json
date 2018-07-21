@@ -127,6 +127,7 @@
         },
         "publicRoute" : {
             "Type" : "AWS::EC2::Route",
+            "DependsOn" : ["publicRouteTable","myInternetGateway"],
             "Properties" : {
                 "RouteTableId" : { "Ref" : "publicRouteTable" },
                 "DestinationCidrBlock" : "0.0.0.0/0",
